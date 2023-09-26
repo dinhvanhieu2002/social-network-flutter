@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_network/screens/auth_ui/complete_signup.dart';
+import 'package:social_network/screens/auth_ui/login.dart';
 
 
 class SignUpSt1Screen extends StatelessWidget {
@@ -119,7 +119,7 @@ class SignUpSt1Screen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const CompleteSignUpScreen(),
+                    builder: (context) => const LoginScreen(),
                   ),
                 );
               },
