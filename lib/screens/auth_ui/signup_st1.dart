@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:social_network/screens/auth_ui/signup_st2.dart';
+import 'package:social_network/screens/auth_ui/complete_signup.dart';
+
 
 class SignUpSt1Screen extends StatelessWidget {
   const SignUpSt1Screen({super.key});
@@ -41,50 +42,74 @@ class SignUpSt1Screen extends StatelessWidget {
               ],
             ),
           ),
-          Center(
+
+          const Align(
+            alignment: Alignment(0, 0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/user.png',
-                      width: 100.0, // Kích thước của hình ảnh user.png
-                      height: 100.0,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Xử lý khi nhấn vào icon máy ảnh
-                      },
-                      child: const Icon(
-                        Icons.camera_alt,
-                        size: 40.0,
-                        color: Colors.blue,
+                SizedBox(height: 130.0),
+                SizedBox(
+                  width: 350.0,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      labelText: 'Full Name',
+                      filled: true,
+                      fillColor: Color(0xF8F5F5F5),
+                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-                const SizedBox(height: 70.0),
+                SizedBox(height: 10.0),
+                SizedBox(
+                  width: 350.0,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      filled: true,
+                      fillColor: Color(0xF8F5F5F5),
+                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10.0), // Khoảng cách giữa Email và Password
+                SizedBox(
+                  width: 350.0,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      filled: true,
+                      fillColor: Color(0xF8F5F5F5),
+                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10.0), // Khoảng cách giữa Password và Confirm Password
+                SizedBox(
+                  width: 350.0,
+                  child: TextField(
+                    decoration: InputDecoration(
+                      labelText: 'Confirm Password',
+                      filled: true,
+                      fillColor: Color(0xF8F5F5F5),
+                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                    ),
+                  ),
+                ),
+
               ],
-            ),
-          ),
-          Align(
-            alignment: const Alignment(0, 0.3),
-            child: Container(
-              width: 350.0, // Độ rộng của ô nhập văn bản
-              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-              decoration: const BoxDecoration(
-                color: Color(0xF8F5F5F5),
-              ),
-              child: const TextField(
-                decoration: InputDecoration(
-                  hintText: 'Full Name',
-                  border: InputBorder.none,
-                ),
-                textAlignVertical: TextAlignVertical.center,
-                enableInteractiveSelection: false,
-              ),
             ),
           ),
           Align(
@@ -94,7 +119,7 @@ class SignUpSt1Screen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const SignUpSt2Screen(),
+                    builder: (context) => const CompleteSignUpScreen(),
                   ),
                 );
               },
@@ -106,7 +131,7 @@ class SignUpSt1Screen extends StatelessWidget {
                 backgroundColor: const Color(0xD7FA3A61),
               ),
               child: const Text(
-                'NEXT',
+                'SIGN UP',
                 style: TextStyle(fontSize: 16.0, color: Colors.white),
               ),
             ),

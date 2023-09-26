@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:social_network/screens/auth_ui/select_option.dart'; // Import file select_option.dart
+import 'package:social_network/screens/auth_ui/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const SelectOptionScreen(), // Sử dụng SelectOptionScreen làm màn hình chính
+      home: const LoginScreen(),
     );
   }
 }

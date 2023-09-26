@@ -47,6 +47,7 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const SizedBox(height: 50.0),
                 const TextField(
                   decoration: InputDecoration(
                     labelText: 'Email',
@@ -83,7 +84,7 @@ class LoginScreen extends StatelessWidget {
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                        borderRadius: BorderRadius.circular(25.0),
                       ), backgroundColor: const Color(0xD7FA3A61), // Đổi màu thành deeppink
                     ),
                     child: const Text(
@@ -95,16 +96,45 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 10.0),
                 InkWell(
-                  onTap: () {
-                    // Xử lý khi nhấn vào "Forgot your Password?"
-                  },
-                  child: const Text(
-                    'Forgot your Password?',
-                    style: TextStyle(fontSize: 14.0, color: Colors.blue),
+                  onTap: () {},
+                  child: Container(
+                    alignment: Alignment.centerRight, //t thấy khi để cái dòng ni bên phải hắn hơi lệch quá. nếu m thích thì sửa lại cho ra giữa
+                    padding: const EdgeInsets.all(10),
+                    child: const Text(
+                      'Forgot your Password?',
+                      style: TextStyle(fontSize: 14.0, color: Colors.blue),
+                    ),
                   ),
                 ),
+                SizedBox(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                           // sự kiện khi click vào hình
+                        },
+                      child: Image.asset(
+                        'assets/images/google.png',
+                        width: 30,
+                      ),
+                      ),
+
+                      GestureDetector(
+                        onTap: () {
+                          // sự kiện khi click vào hình
+                        },
+                        child: Image.asset(
+                          'assets/images/facebook.png',
+                          width: 30,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+
               ],
             ),
           ),
@@ -143,17 +173,6 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            top: 30.0,
-            left: 10.0,
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
-
         ],
       ),
     );
