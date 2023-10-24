@@ -15,7 +15,3 @@ class AssetImages {
 }
 
 
-
-// class AssetsImages {
-//   static const String LogoImage = 'assets/images/instagram.png';
-// }

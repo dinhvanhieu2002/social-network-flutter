@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_network/screens/auth_ui/login.dart';
+import 'package:social_network/screens/auth_ui/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginScreen(),
+      home: const BottomTabScreen(),
     );
   }
 }
