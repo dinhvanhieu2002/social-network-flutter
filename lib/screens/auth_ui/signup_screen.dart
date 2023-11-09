@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:social_network/screens/auth_ui/login_screen.dart';
-import 'package:social_network/respository/auth_repository.dart';
+import 'package:social_network/repository/auth_repository.dart';
 import 'package:routemaster/routemaster.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {

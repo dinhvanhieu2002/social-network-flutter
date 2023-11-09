@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:social_network/models/error_model.dart';
-import 'package:social_network/respository/auth_repository.dart';
+import 'package:social_network/repository/auth_repository.dart';
 import 'package:social_network/router.dart';
 
 void main() {
@@ -44,10 +44,13 @@ class _MyAppState extends ConsumerState<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Your App Title',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryIconTheme: Theme.of(context).primaryIconTheme.copyWith(
+              color: Colors.black,
+            ),
       ),
       routerDelegate: RoutemasterDelegate(routesBuilder: (context) {
         final user = ref.watch(userProvider);
+
         if (user != null && user.token.isNotEmpty) {
           return loggedInRoute;
         }

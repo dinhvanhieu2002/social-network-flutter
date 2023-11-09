@@ -6,7 +6,10 @@ class UserModel {
   final String fullName;
   final String? password;
   final String avatar;
-  final String uid;
+  final String bio;
+  final List<dynamic> following;
+  final List<dynamic> followers;
+  final String id;
   final String token;
 
   UserModel({
@@ -14,8 +17,11 @@ class UserModel {
     required this.username,
     required this.fullName,
     required this.avatar,
+    required this.bio,
     required this.password,
-    required this.uid,
+    required this.following,
+    required this.followers,
+    required this.id,
     required this.token,
   });
 
@@ -25,8 +31,11 @@ class UserModel {
       'username': username,
       'fullName': fullName,
       'avatar': avatar,
+      'bio': bio,
       'password': password,
-      'uid': uid,
+      'following': following,
+      'followers': followers,
+      'id': id,
       'token': token,
     };
   }
@@ -37,8 +46,11 @@ class UserModel {
       username: map['username'],
       fullName: map['fullName'] ?? '',
       avatar: map['avatar'] ?? '',
+      bio: map['bio'] ?? '',
       password: map['password'],
-      uid: map['_id'] ?? '',
+      following: map['following'] ?? [],
+      followers: map['followers'] ?? [],
+      id: map['id'] ?? '',
       token: map['token'] ?? '',
     );
   }
@@ -53,8 +65,11 @@ class UserModel {
     String? username,
     String? fullName,
     String? avatar,
+    String? bio,
     String? password,
-    String? uid,
+    List<String>? following,
+    List<String>? followers,
+    String? id,
     String? token,
   }) {
     return UserModel(
@@ -62,8 +77,11 @@ class UserModel {
       username: username,
       fullName: fullName ?? this.fullName,
       avatar: avatar ?? this.avatar,
+      bio: bio ?? this.bio,
       password: password,
-      uid: uid ?? this.uid,
+      following: following ?? this.following,
+      followers: followers ?? this.followers,
+      id: id ?? this.id,
       token: token ?? this.token,
     );
   }
