@@ -14,23 +14,31 @@ class ActivityRepository {
   final Client _client;
   ActivityRepository({required Client client}) : _client = client;
 
-  void addActivity(String token, String currentUserId, PostModel post,
+  Future<void> addActivity(String token, String currentUserId, PostModel post,
       String comment) async {
-    final activity = ActivityModel(
-        fromUserId: currentUserId,
-        toUserId: post.userId!,
-        postId: post.id,
-        postImageUrl: post.photo,
-        comment: comment,
-        createdAt: null,
-        updatedAt: null);
+    try {
+      print(' add activity');
+      final activity = ActivityModel(
+          fromUserId: currentUserId,
+          toUserId: post.userId!,
+          postId: post.id,
+          postImageUrl: post.photo,
+          comment: comment,
+          createdAt: null,
+          updatedAt: null);
 
-    if (currentUserId != post.userId) {
-      await _client
-          .post(Uri.parse('$host/posts'), body: activity.toJson(), headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': token,
-      });
+      if (currentUserId != post.userId) {
+        var res = await _client.post(Uri.parse('$host/activities'),
+            body: activity.toJson(),
+            headers: {
+              'Content-Type': 'application/json; charset=UTF-8',
+              'x-auth-token': token,
+            });
+
+        print(jsonDecode(res.body)['error']);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 

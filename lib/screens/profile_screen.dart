@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:routemaster/routemaster.dart';
+import 'package:social_network/models/conversation_model.dart';
 import 'package:social_network/models/error_model.dart';
 import 'package:social_network/models/post_model.dart';
 import 'package:social_network/models/user_model.dart';
 import 'package:social_network/repository/auth_repository.dart';
+import 'package:social_network/repository/conversation_repository.dart';
 import 'package:social_network/repository/post_repository.dart';
 import 'package:social_network/screens/edit_profile_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -45,7 +48,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         .read(authRepositoryProvider)
         .getUserWithId(token: token, userId: widget.userId);
 
-    bool isFollowingUser = user.following.contains(widget.currentUserId);
+    bool isFollowingUser = user.followers.contains(widget.currentUserId);
 
     setState(() {
       _profileUser = user;
@@ -72,18 +75,41 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
   }
 
+  moveToChat(context) async {
+    ConversationModel? con = await ref
+        .read(conversationRepositoryProvider)
+        .getConversationOfUser(
+            token: ref.read(userProvider)!.token,
+            userId: widget.userId);
+    if(con != null) {
+      print("move to $con");
+      Routemaster.of(context).push('/conversations/${con.id}');
+    } else {
+      ConversationModel? newConn = await ref.watch(conversationRepositoryProvider).addConversation(
+        token: ref.watch(userProvider)!.token, 
+        senderId: widget.currentUserId, 
+        receivedId: widget.userId);
+
+      print("create and move to $con");
+      if(newConn != null) {
+        Routemaster.of(context).push('/conversations/${newConn.id}');
+      }
+    }
+  
+  }
+
   _followUser() async {
     String token = ref.read(userProvider)!.token;
-    ref.read(authRepositoryProvider).follow(token, widget.userId);
+    await ref.read(authRepositoryProvider).follow(token, widget.userId);
     setState(() {
       _isFollowing = true;
       _followerCount++;
     });
   }
 
-  _unfollowUser() {
+  _unfollowUser() async {
     String token = ref.read(userProvider)!.token;
-    ref.read(authRepositoryProvider).unfollow(token, widget.userId);
+    await ref.read(authRepositoryProvider).unfollow(token, widget.userId);
     setState(() {
       _isFollowing = false;
       _followerCount--;
@@ -123,15 +149,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   textStyle: const TextStyle(color: Colors.white)),
               child: const Text(
                 'Edit Profile',
-                style: TextStyle(fontSize: 18.0),
+                style: TextStyle(fontSize: 14.0),
               ),
             ),
           )
-        : SizedBox(
-            width: 200.0,
-            child: ElevatedButton(
+        : Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
               // _followOrUnfollow
-              onPressed: () => {},
+              onPressed: () => followOrUnfollow(),
               style: ElevatedButton.styleFrom(
                   backgroundColor:
                       _isFollowing ? Colors.grey[200] : Colors.blue,
@@ -140,10 +167,26 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   )),
               child: Text(
                 _isFollowing ? 'Unfollow' : 'Follow',
-                style: const TextStyle(fontSize: 18.0),
+                style: TextStyle(fontSize: 14.0, color: _isFollowing ? Colors.black : Colors.white),
               ),
             ),
-          );
+            const SizedBox(width: 10,),
+            ElevatedButton(
+              // _followOrUnfollow
+              onPressed: () => moveToChat(context),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      Colors.grey[200],
+                  textStyle: const TextStyle(
+                    color: Colors.black,
+                  )),
+              child: const Text(
+                'Message',
+                style: TextStyle(fontSize: 14.0, color: Colors.black),
+              ),
+            ),
+          ],
+        );
   }
 
   buildProfileInfo(UserModel user) {
@@ -152,18 +195,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         Padding(
           padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0.0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              CircleAvatar(
-                radius: 40.0,
-                backgroundImage: CachedNetworkImageProvider(
-                  user.avatar,
+              Padding(
+                padding: const EdgeInsets.only(right: 15.0),
+                child: CircleAvatar(
+                  radius: 40.0,
+                  backgroundImage: CachedNetworkImageProvider(
+                    user.avatar,
+                  ),
                 ),
               ),
               Expanded(
                 child: Column(
                   children: <Widget>[
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         Column(
                           children: <Widget>[
@@ -227,15 +274,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               Text(
                 _profileUser != null ? _profileUser!.fullName : "Loading...",
                 style: const TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 14.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
                 _profileUser != null ? _profileUser!.bio : "Loading...",
                 style: const TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 14.0,
                 ),
               ),
               const Divider(),
@@ -312,6 +358,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             currentUserId: widget.currentUserId,
             post: post,
             author: _profileUser!,
+            showCommentCount: true,
           ),
         );
       }
@@ -330,23 +377,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
+        leading: widget.currentUserId != widget.userId ? IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black,)) : null,
         centerTitle: false,
         shadowColor: Colors.transparent,
-        title: Text(
-          _profileUser?.username ?? "Loading...",
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 20.0,
-          ),
-        ),
+        title: _profileUser?.username != null
+            ? Text(
+                _profileUser?.username ?? "Loading...",
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0,
+                ),
+              )
+            : const CircularProgressIndicator(),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.exit_to_app,
-              color: Colors.black,
-            ),
-            onPressed: () => signOut(ref),
-          ),
+          widget.userId == widget.currentUserId
+              ? IconButton(
+                  icon: const Icon(
+                    Icons.exit_to_app,
+                    color: Colors.black,
+                  ),
+                  onPressed: () => signOut(ref),
+                )
+              : const SizedBox(),
         ],
       ),
       body: FutureBuilder(

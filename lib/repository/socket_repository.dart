@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:social_network/clients/socket_client.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -8,13 +6,20 @@ class SocketRepository {
 
   Socket get socketClient => _socketClient;
 
-  void sendMessage(
-      String senderId, String receiverId, String text, String image) {
-    _socketClient.emit(
-        "sendMessage", jsonEncode({senderId, receiverId, text, image}));
+  void joinRoom(String conversationId) {
+    _socketClient.emit('join', conversationId);
   }
 
-  dynamic getMessage() {
-    _socketClient.on('getMessage', (data) => data);
+  void sendMessage(Map<String, dynamic> data) {
+    _socketClient.emit(
+        "sendMessage", data);
   }
+
+  void getMessage(Function(Map<String, dynamic>) func) {
+    _socketClient.on('getMessage', (data) => func(data));
+  }
+
+  // dynamic getMessage() {
+  //   _socketClient.on('getMessage', (data) => data);
+  // }
 }

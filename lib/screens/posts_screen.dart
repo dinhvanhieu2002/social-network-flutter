@@ -48,6 +48,7 @@ class _PostsScreenState extends ConsumerState<PostsScreen> {
           currentUserId: widget.currentUserId,
           post: post,
           author: widget.profileUser,
+          showCommentCount: true,
         ),
       );
     }
@@ -79,6 +80,7 @@ class _PostsScreenState extends ConsumerState<PostsScreen> {
                 currentUserId: widget.currentUserId,
                 post: post,
                 author: author,
+                showCommentCount: true,
               );
             },
           );

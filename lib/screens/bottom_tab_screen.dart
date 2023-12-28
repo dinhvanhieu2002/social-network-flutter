@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:social_network/models/error_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:social_network/screens/activity_screen.dart';
-import 'package:social_network/screens/create_post_screen.dart';
 import 'package:social_network/screens/feed_screen.dart';
 import 'package:social_network/screens/search_screen.dart';
 import 'package:social_network/screens/profile_screen.dart';
@@ -43,8 +43,7 @@ class _BottomTabScreenState extends ConsumerState<BottomTabScreen> {
         _currentIndex = index;
       });
     } else {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (_) => const CreatePostScreen()));
+      Routemaster.of(context).push('/create-post');
     }
   }
 

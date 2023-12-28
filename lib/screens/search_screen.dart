@@ -58,7 +58,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             hintText: 'Search',
             prefixIcon: const Icon(
               Icons.search,
-              size: 30.0,
+              size: 24.0,
             ),
             suffixIcon: IconButton(
               icon: const Icon(

@@ -65,7 +65,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     }
   }
 
-  submit() async {
+  submit(context) async {
     if (_formKey.currentState!.validate() && !_isLoading) {
       _formKey.currentState!.save();
 
@@ -90,15 +90,17 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           email: '',
           fullName: _fullName,
           avatar: profileImageUrl,
-          bio: '',
+          bio: _bio,
           password: '',
           following: [],
           followers: [],
           token: '');
 
+          print(profileImageUrl);
+      await ref.watch(authRepositoryProvider).updateProfile(token: ref.watch(userProvider)!.token, user: user);
       widget.updateUser(user);
 
-      Navigator.pop(context);
+      Navigator.of(context).pop();
     }
   }
 
@@ -199,7 +201,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       height: 40.0,
                       width: 250.0,
                       child: ElevatedButton(
-                        onPressed: submit,
+                        onPressed: () => submit(context),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
                             textStyle: const TextStyle(color: Colors.white)),

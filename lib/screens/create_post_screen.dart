@@ -112,6 +112,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                       _image = File(croppedFile.path);
                     });
                   }
+
                 }
               },
             ),
@@ -130,35 +131,28 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     );
   }
 
-  void submit(BuildContext context, WidgetRef ref) async {
+  void submit(context, ref) async {
     if (!_isLoading && _image != null && _caption.isNotEmpty) {
       setState(() {
         _isLoading = true;
       });
-      String token = ref.read(userProvider)!.token;
-      final snackbar = ScaffoldMessenger.of(context);
+      String token = ref.watch(userProvider)!.token;
       // Create post
       String imageUrl =
-          await ref.read(uploadRepositoryProvider).uploadPost(_image!, token);
+          await ref.watch(uploadRepositoryProvider).uploadPost(_image!, token);
 
       final errorModel = await ref
-          .read(postRepositoryProvider)
+          .watch(postRepositoryProvider)
           .createPost(token: token, caption: _caption, photo: imageUrl);
 
       if (errorModel.data != null) {
-        snackbar.showSnackBar(
-          const SnackBar(
-            content: Text("Create new post sucessfull!"),
-          ),
-        );
+        print("Create new post sucessfull!");
       } else {
-        snackbar.showSnackBar(
-          SnackBar(
-            content: Text(errorModel.error!),
-          ),
-        );
+        print(errorModel.error!);
       }
       _captionController.clear();
+
+      Routemaster.of(context).pop();
 
       setState(() {
         _caption = '';
@@ -192,7 +186,9 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
           IconButton(
             color: Colors.black,
             icon: const Icon(Icons.add),
-            onPressed: () => submit(context, ref),
+            onPressed: () {
+              submit(context, ref);
+            }  
           ),
         ],
       ),

@@ -34,7 +34,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
         .getActivities(ref.read(userProvider)!.token);
     if (mounted) {
       setState(() {
-        _activities = activities;
+        _activities = activities.reversed.toList();
       });
     }
   }

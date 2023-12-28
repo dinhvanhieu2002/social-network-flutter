@@ -127,14 +127,14 @@ class PostRepository {
     }
   }
 
-  void likePost(String token, String id) async {
+  Future<void> likePost(String token, String id) async {
     await _client.post(Uri.parse('$host/posts/$id/like'), headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       'x-auth-token': token,
     });
   }
 
-  void unlikePost(String token, String id) async {
+  Future<void> unlikePost(String token, String id) async {
     await _client.post(Uri.parse('$host/posts/$id/unlike'), headers: {
       'Content-Type': 'application/json; charset=UTF-8',
       'x-auth-token': token,

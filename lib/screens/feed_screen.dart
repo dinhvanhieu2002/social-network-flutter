@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:social_network/models/error_model.dart';
+import 'package:routemaster/routemaster.dart';
 import 'package:social_network/models/post_model.dart';
 import 'package:social_network/models/user_model.dart';
-import 'package:social_network/widgets/post/comment_view.dart';
 import 'package:social_network/widgets/post/post_view.dart';
 import 'package:social_network/repository/post_repository.dart';
 import 'package:social_network/repository/auth_repository.dart';
-import 'package:social_network/widgets/loader.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:social_network/widgets/refresh_widget.dart';
 
 class FeedScreen extends ConsumerStatefulWidget {
   const FeedScreen({super.key});
@@ -18,12 +17,19 @@ class FeedScreen extends ConsumerStatefulWidget {
 }
 
 class _FeedScreenState extends ConsumerState<FeedScreen> {
-  ErrorModel? errorModel;
-
+  List<PostModel> _posts = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    loadPosts();
+  }
+
+  Future loadPosts() async {
+    List<PostModel> posts = await ref.read(postRepositoryProvider).getPosts(ref.read(userProvider)!.token);
+    setState(() {
+      _posts = posts;
+    });
   }
 
   @override
@@ -49,7 +55,8 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                       shadowColor: Colors.transparent,
                       actions: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () =>
+                              Routemaster.of(context).replace('/conversations'),
                           icon: SvgPicture.asset(
                             'assets/images/messenger.svg',
                             width: 24,
@@ -61,50 +68,35 @@ class _FeedScreenState extends ConsumerState<FeedScreen> {
                     ),
                   ];
                 },
-                body: FutureBuilder(
-                    future: ref.watch(postRepositoryProvider).getPosts(
-                          ref.watch(userProvider)!.token,
-                        ),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Loader();
-                      }
-                      final List<PostModel> posts = snapshot.data!;
-
-                      return ListView.builder(
-                          itemCount: posts.length,
-                          itemBuilder: (context, index) {
-                            PostModel post = posts[index];
-                            return FutureBuilder(
-                              future: ref
-                                  .watch(authRepositoryProvider)
-                                  .getUserWithId(
-                                    token: ref.watch(userProvider)!.token,
-                                    userId: post.userId!,
-                                  ),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return const SizedBox.shrink();
-                                }
-                                UserModel author = snapshot.data!;
-
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    PostView(
-                                      currentUserId: currentUserId,
-                                      post: post,
-                                      author: author,
+                body: RefreshWidget(
+                  onRefresh: loadPosts,
+                  child: ListView.builder(
+                            itemCount: _posts.length,
+                            itemBuilder: (context, index) {
+                              PostModel post = _posts[index];
+                              return FutureBuilder(
+                                future: ref
+                                    .watch(authRepositoryProvider)
+                                    .getUserWithId(
+                                      token: ref.watch(userProvider)!.token,
+                                      userId: post.userId!,
                                     ),
-                                    CommentView(
-                                        currentUserId: currentUserId,
-                                        post: post,
-                                        author: author),
-                                  ],
-                                );
-                              },
-                            );
-                          });
-                    }))));
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const SizedBox.shrink();
+                                  }
+                                  UserModel author = snapshot.data!;
+                
+                                  return PostView(
+                                    currentUserId: currentUserId,
+                                    post: post,
+                                    author: author,
+                                    showCommentCount: true,
+                                  );
+                                },
+                              );
+                            }),
+                )
+                    )));
   }
 }

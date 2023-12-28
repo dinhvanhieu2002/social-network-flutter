@@ -252,26 +252,34 @@ class AuthRepository {
     _localStorageRepository.setToken('');
   }
 
-  void follow(String token, String id) async {
-    await _client.post(Uri.parse('$host/users/follow'),
-        body: jsonEncode({
-          'followedId': id,
-        }),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token,
-        });
+  Future<void> follow(String token, String id) async {
+    try {
+      await _client.post(Uri.parse('$host/users/follow'),
+          body: jsonEncode({
+            'followedId': id,
+          }),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'x-auth-token': token,
+          });
+    } catch (e) {
+      print(e);
+    }
   }
 
-  void unfollow(String token, String id) async {
-    await _client.post(Uri.parse('$host/users/unfollow'),
-        body: jsonEncode({
-          'followedId': id,
-        }),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token,
-        });
+  Future<void> unfollow(String token, String id) async {
+    try {
+      await _client.post(Uri.parse('$host/users/unfollow'),
+          body: jsonEncode({
+            'followedId': id,
+          }),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'x-auth-token': token,
+          });
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<ErrorModel> getSuggestedUsers(String token) async {
@@ -335,6 +343,19 @@ class AuthRepository {
     } catch (e) {
       print(e);
       return users;
+    }
+  }
+
+  Future<void> updateProfile({required String token, required UserModel user}) async {
+    try {
+      await _client.put(Uri.parse('$host/users/'),
+          body: user.toJson(),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'x-auth-token': token,
+          });
+    } catch (e) {
+      print(e);
     }
   }
 }

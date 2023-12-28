@@ -27,6 +27,7 @@ class CommentModel {
       'likeCount': likeCount,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+      'postId': postId,
       'id': id,
       'userId': userId,
     };

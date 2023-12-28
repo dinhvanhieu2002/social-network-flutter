@@ -54,7 +54,7 @@ class UploadRepository {
       final response = await http.Response.fromStream(streamedResponse);
       if (response.statusCode == 200) {
         print('Image uploaded successfully');
-        return jsonEncode(jsonDecode(response.body)['secure_url']);
+        return jsonDecode(response.body)['secure_url'];
       } else {
         print('Image upload failed with status code ${response.statusCode}');
         return "upload faild";
@@ -80,7 +80,7 @@ class UploadRepository {
       final response = await http.Response.fromStream(streamedResponse);
       if (response.statusCode == 200) {
         print('Image uploaded successfully');
-        return jsonEncode(jsonDecode(response.body)['secure_url']);
+        return jsonDecode(response.body)['secure_url'];
       } else {
         print('Image upload failed with status code ${response.statusCode}');
         return "upload faild";

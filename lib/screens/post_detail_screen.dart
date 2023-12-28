@@ -145,7 +145,8 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                     return PostView(
                         currentUserId: currentUserId,
                         post: widget.post,
-                        author: author);
+                        author: author,
+                        showCommentCount: false,);
                   }),
               const Divider(
                 height: 1.0,

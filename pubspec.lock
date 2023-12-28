@@ -9,6 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "61.0.0"
+  ably_flutter:
+    dependency: "direct main"
+    description:
+      name: ably_flutter
+      sha256: "7bbb0c9c1e8acabef8c1d6efd8fae08aa99e655ff22b72e4f1c0cc5b2cefee87"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.24"
   analyzer:
     dependency: transitive
     description:
@@ -129,6 +137,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+  days_ago:
+    dependency: "direct main"
+    description:
+      name: days_ago
+      sha256: "87ed698f0c0ae4aed509d30c9a4185b6e3634357e17056a139a951cecfcbd63b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   facebook_auth_desktop:
     dependency: transitive
     description:
@@ -307,6 +323,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  flutter_slidable:
+    dependency: "direct main"
+    description:
+      name: flutter_slidable
+      sha256: "19ed4813003a6ff4e9c6bcce37e792a2a358919d7603b2b31ff200229191e44c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -890,6 +914,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0"
+  timeago:
+    dependency: "direct main"
+    description:
+      name: timeago
+      sha256: c44b80cbc6b44627c00d76960f2af571f6f50e5dbedef4d9215d455e4335165b
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.6.0"
   typed_data:
     dependency: transitive
     description:
