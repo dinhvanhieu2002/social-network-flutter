@@ -15,7 +15,7 @@ class ConversationRepository {
 
   Future<ConversationModel?> addConversation({required String token, required String senderId, required String receivedId}) async {
     try {
-      List<String> users = [senderId, receivedId];
+      List<String> users =  [senderId, receivedId];
       final conversation = ConversationModel(
           lastMessageAt: null,
           messages: null,
@@ -31,7 +31,7 @@ class ConversationRepository {
       });
       ConversationModel? con;
       switch (res.statusCode) {
-        case 200:
+        case 201:
           con = conversation.copyWith(
             id: jsonDecode(res.body)['id']
           );
@@ -95,7 +95,7 @@ class ConversationRepository {
       case 200:
       print(res.body);
         // conversation = ConversationModel.fromJson(res.body);
-        conversation = ConversationModel.fromJson(jsonEncode(jsonDecode(res.body)[0]));
+        conversation = ConversationModel.fromJson(jsonEncode(jsonDecode(res.body)));
         break;
     }
 

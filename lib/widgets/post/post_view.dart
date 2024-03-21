@@ -150,26 +150,26 @@ class _PostViewState extends ConsumerState<PostView> {
                 ]),
                 child: ListTile(
                   leading: CircleAvatar(
-                    radius: 25.0,
+                    radius: 20.0,
                     backgroundColor: Colors.grey,
                     backgroundImage: CachedNetworkImageProvider(author.avatar),
                   ),
                   title: Row(
                     children: [
-                      Text(author.username!),
+                      Text(author.username!, style: const TextStyle(fontSize: 14)),
                       const SizedBox(
                         width: 10,
                       ),
                       Text(
                         timeago.format(DateTime.parse(comment.createdAt!)),
-                        style: const TextStyle(fontSize: 13),
+                        style: const TextStyle(fontSize: 10),
                       ),
                     ],
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(comment.caption),
+                      Text(comment.caption, style: const TextStyle(fontSize: 12)),
                       const SizedBox(height: 6.0),
                     ],
                   ),
@@ -177,7 +177,7 @@ class _PostViewState extends ConsumerState<PostView> {
               )
             : ListTile(
                 leading: CircleAvatar(
-                  radius: 25.0,
+                  radius: 20.0,
                   backgroundColor: Colors.grey,
                   backgroundImage: CachedNetworkImageProvider(author.avatar),
                 ),
@@ -189,7 +189,7 @@ class _PostViewState extends ConsumerState<PostView> {
                     ),
                     Text(
                       timeago.format(DateTime.parse(comment.createdAt!)),
-                      style: const TextStyle(fontSize: 13),
+                      style: const TextStyle(fontSize: 10),
                     ),
                   ],
                 ),
@@ -205,60 +205,69 @@ class _PostViewState extends ConsumerState<PostView> {
     );
   }
 
-  buildCommentTF() {
-    return IconTheme(
-      data: IconThemeData(
-        color: _isCommenting
-            ? Theme.of(context).focusColor
-            : Theme.of(context).disabledColor,
-      ),
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            const SizedBox(width: 10.0),
-            Expanded(
-              child: TextField(
-                controller: _commentController,
-                textCapitalization: TextCapitalization.sentences,
-                onChanged: (comment) {
-                  setState(() {
-                    _isCommenting = comment.isNotEmpty;
-                  });
-                },
-                decoration: const InputDecoration.collapsed(
-                    hintText: 'Write a comment...'),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: IconButton(
-                icon: const Icon(Icons.send),
-                onPressed: () async {
-                  if (_isCommenting) {
-                    CommentModel? newComment = await ref.watch(commentRepositoryProvider).addComment(
-                        ref.watch(userProvider)!.token,
-                        _commentController.text,
-                        widget.post.id);
+  void updateComments(CommentModel comment) {
+    setState(() {
+      _comments = [comment, ..._comments!];
+      _commentCount++;
+      _isCommenting = false;
+    });
+  }
 
-                    await ref.watch(activityRepositoryProvider).addActivity(
-                        ref.watch(userProvider)!.token,
-                        ref.watch(userProvider)!.id,
-                        widget.post,
-                        _commentController.text);
-                    _commentController.clear();
-                    
+  buildCommentTF() {
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) => 
+       IconTheme(
+        data: IconThemeData(
+          color: _isCommenting
+              ? Theme.of(context).focusColor
+              : Theme.of(context).disabledColor,
+        ),
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(width: 10.0),
+              Expanded(
+                child: TextField(
+                  controller: _commentController,
+                  textCapitalization: TextCapitalization.sentences,
+                  keyboardType: TextInputType.text,
+                  onChanged: (comment) {
                     setState(() {
-                      _comments = [newComment, ..._comments!];
-                      _commentCount++;
-                      _isCommenting = false;
+                      _isCommenting = comment.isNotEmpty;
                     });
-                  }
-                },
+                  },
+                  decoration: const InputDecoration.collapsed(
+                      hintText: 'Write a comment...'),
+                ),
               ),
-            ),
-          ],
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: () async {
+                    if (_isCommenting) {
+                      CommentModel? newComment = await ref.watch(commentRepositoryProvider).addComment(
+                          ref.watch(userProvider)!.token,
+                          _commentController.text,
+                          widget.post.id);
+    
+                      await ref.watch(activityRepositoryProvider).addActivity(
+                          ref.watch(userProvider)!.token,
+                          ref.watch(userProvider)!.id,
+                          widget.post,
+                          _commentController.text);
+                      _commentController.clear();
+                      print("new comment ${newComment.id}");
+                      
+                      updateComments(newComment);
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

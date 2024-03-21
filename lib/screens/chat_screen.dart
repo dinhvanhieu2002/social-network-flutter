@@ -69,6 +69,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
               controller: _captionController,
               textCapitalization: TextCapitalization.sentences,
               onChanged: (input) => _caption = input,
+              keyboardType: TextInputType.text,
               decoration: const InputDecoration.collapsed(
                 hintText: 'Send a message...',
               ),

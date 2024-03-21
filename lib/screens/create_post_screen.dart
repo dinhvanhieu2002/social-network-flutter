@@ -232,6 +232,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                   child: TextField(
                     controller: _captionController,
                     style: const TextStyle(fontSize: 18.0),
+                    keyboardType: TextInputType.text,
                     decoration: const InputDecoration(
                       labelText: 'Caption',
                     ),

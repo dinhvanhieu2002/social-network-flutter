@@ -33,21 +33,23 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
         }
         UserModel author = snapshot.data!;
         return ListTile(
+          tileColor: Colors.white,
           leading: CircleAvatar(
-            radius: 25.0,
+            radius: 20.0,
             backgroundColor: Colors.grey,
             backgroundImage: CachedNetworkImageProvider(author.avatar),
           ),
-          title: Text(author.username!),
+          title: Text(author.username!, style: const TextStyle(fontSize: 14)),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(comment.caption),
+              Text(comment.caption, style: const TextStyle(fontSize: 12)),
               const SizedBox(height: 6.0),
               Text(
                 DateFormat.yMd()
                     .add_jm()
-                    .format(DateTime.parse(comment.createdAt!)),
+                    .format(DateTime.parse(comment.createdAt!, )),
+                    style: const TextStyle(fontSize: 10)
               ),
             ],
           ),
@@ -71,6 +73,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
               child: TextField(
                 controller: _commentController,
                 textCapitalization: TextCapitalization.sentences,
+                keyboardType: TextInputType.text,
                 onChanged: (comment) {
                   setState(() {
                     _isCommenting = comment.isNotEmpty;

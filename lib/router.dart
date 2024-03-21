@@ -14,16 +14,6 @@ final loggedOutRoute = RouteMap(routes: {
 
 final loggedInRoute = RouteMap(routes: {
   '/': (route) => const MaterialPage(child: BottomTabScreen()),
-  //search, profile, image picker, notify
-  // '/conversations': (route) => MaterialPage(
-  //       child: ConversationsScreen(),
-  //     ),
-  // '/conversation/:id': (route) => MaterialPage(
-  //       child: ChatScreen(
-  //         id: route.pathParameters['id'] ?? '',
-  //       ),
-  //     ),
-
   '/conversations': (route) => const MaterialPage(child: ConversationsScreen()),
   '/conversations/:conversationId': (route) => MaterialPage(child: ChatScreen(conversationId: route.pathParameters['conversationId'] ?? '')),
   '/create-post': (route) => const MaterialPage(child: CreatePostScreen()),

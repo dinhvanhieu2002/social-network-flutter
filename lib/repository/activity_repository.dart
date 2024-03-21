@@ -17,7 +17,6 @@ class ActivityRepository {
   Future<void> addActivity(String token, String currentUserId, PostModel post,
       String comment) async {
     try {
-      print(' add activity');
       final activity = ActivityModel(
           fromUserId: currentUserId,
           toUserId: post.userId!,
@@ -28,14 +27,12 @@ class ActivityRepository {
           updatedAt: null);
 
       if (currentUserId != post.userId) {
-        var res = await _client.post(Uri.parse('$host/activities'),
+        await _client.post(Uri.parse('$host/activities'),
             body: activity.toJson(),
             headers: {
               'Content-Type': 'application/json; charset=UTF-8',
               'x-auth-token': token,
             });
-
-        print(jsonDecode(res.body)['error']);
       }
     } catch (e) {
       print(e);

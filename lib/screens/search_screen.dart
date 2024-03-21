@@ -52,6 +52,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         backgroundColor: Colors.white,
         title: TextField(
           controller: _searchController,
+          keyboardType: TextInputType.text,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
             border: InputBorder.none,
